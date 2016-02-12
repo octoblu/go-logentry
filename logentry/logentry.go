@@ -43,7 +43,7 @@ type LogEntry struct {
 }
 
 // New constructs a new LogEntry
-func New(indexPrefix, typeName, JobType, WorkerName string, Code, ElapsedTime int) *LogEntry {
+func New(indexPrefix, typeName, JobType, WorkerName string, Code, ElapsedTime int, success ...bool) *LogEntry {
 	now := time.Now()
 	index := fmt.Sprintf("%v-%04d-%02d-%02d", indexPrefix, now.Year(), now.Month(), now.Day())
 
@@ -51,6 +51,10 @@ func New(indexPrefix, typeName, JobType, WorkerName string, Code, ElapsedTime in
 	request := Request{Metadata: requestMetadata}
 
 	Success := (Code < 500)
+	if len(success) > 0 {
+		Success = success[0]
+	}
+
 	responseMetadata := ResponseMetadata{Code: Code, Success: Success}
 	response := Response{Metadata: responseMetadata}
 
